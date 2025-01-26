@@ -35,11 +35,26 @@ jobs:
     - uses: DeterminateSystems/magic-nix-cache-action@v2
 
     - run: >
-        nix flake check
-        --keep-going
-        --all-systems
+        nix flake update
         --override-input quadlet-nix "path:$(pwd)"
         --override-input nixpkgs 'github:NixOS/nixpkgs/${{ matrix.version.nixpkgs }}'
         --override-input home-manager 'github:nix-community/home-manager/${{ matrix.version.home-manager }}'
         --override-input test-config "path:$(pwd)/tests/${{ matrix.system }}"
-        ./tests
+        --flake ./tests
+
+    - run: >
+        nix run github:Mic92/nix-fast-build
+        --
+        --skip-cached
+        --no-nom
+        --result-format junit
+        --result-file result.xml
+        --flake './tests#checks.${{ matrix.system }}'
+
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.system }}-${{ matrix.version.nixpkgs }}
+        path: result.xml
+        retention-days: 1
