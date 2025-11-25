@@ -119,6 +119,26 @@ let
       property = "NetworkName";
     };
 
+    defaultRootlessNetworkCmd = quadletOptions.mkOption {
+      type = types.nullOr (
+        types.enum [
+          "pasta"
+          "slirp4netns"
+        ]
+      );
+      default = null;
+      description = "default rootless networking tool";
+      property = "default_rootless_network_cmd";
+    };
+
+    pastaOptions = quadletOptions.mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "[\"-i\", \"enp3s0\"]";
+      description = "options for pasta command";
+      property = "pasta_options";
+    };
+
     networkDeleteOnStop = quadletOptions.mkOption {
       type = types.nullOr types.bool;
       default = null;
