@@ -39,7 +39,13 @@ in
             text = p._configText;
             mode = "0600";
           };
-        }) allObjects);
+        }) allObjects
+        {
+          "containers/containers.conf" = {
+            text = "[Network]\ndefault_rootless_network_cmd \= \"pasta\"";
+            mode = "0600";
+          };
+        });
       # The symlinks are not necessary for the services to be honored by systemd,
       # but necessary for NixOS activation process to pick them up for updates.
       systemd.packages = [
