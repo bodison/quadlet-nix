@@ -40,6 +40,7 @@ in
             mode = "0600";
           };
         }) allObjects
+        ++
         {
           "containers/containers.conf" = {
             text = "[Network]\ndefault_rootless_network_cmd \= \"pasta\"";
